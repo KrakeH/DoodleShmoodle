@@ -45,7 +45,7 @@ public class Doodle {
 
     public void jump(){
         velocity.y=800;
-    }
+    }//
     public void move(float x){
         position.x-=x;
     }
