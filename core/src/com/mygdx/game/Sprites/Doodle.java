@@ -41,7 +41,7 @@ public class Doodle {
         if(position.x< -doodle.getWidth()){
             position.x=Main.WIDTH;
         }
-    }//
+    }////
 
     public void jump(){
         velocity.y=800;
