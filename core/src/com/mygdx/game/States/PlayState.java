@@ -90,10 +90,10 @@ public class PlayState extends State {
         }
 
 
-        if(doodle.getPosition().y<0)
+        if(doodle.getPosition().y<=-doodle.getDoodle().getHeight())
         {
+            gsm.set(new DieState(gsm,record));
             record=0;
-            gsm.set(new DieState(gsm));
         }
     }
 
