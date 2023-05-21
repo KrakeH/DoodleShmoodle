@@ -8,10 +8,12 @@ import java.util.Random;
 
 public class Platform {
     private Texture platform;
-    private Texture platdestroy;
-    private Vector2 posPlat,posPlatDest;
+    private Texture platDestroy;
+    private Vector2 posPlat;
     private Random rand;
-    private int platwidth=150;
+    private int platwidth = 120;
+    private DestroyPlatform destroyPlatform;
+    public boolean IsPlatDest = false;
 
     public Texture getPlatform() {
         return platform;
@@ -21,40 +23,40 @@ public class Platform {
         return posPlat;
     }
 
-    private Platform(){
+    private Platform() {
         rand = new Random();
     }
 
     public Platform(float y) {
         this();
         platform = new Texture("Platform.png");
-        platdestroy= new Texture("Platform.png");
         rand = new Random();
+//        if (rand.nextInt(3) == 0) {
+//            IsPlatDest = true;
+//        } else {
+//            IsPlatDest = false;
+//        }
         posPlat = new Vector2(rand.nextInt(Main.WIDTH - platwidth), y);
     }
-    public Platform(float x,float y) {
+
+    public Platform(float x, float y) {
         this();
         platform = new Texture("Platform.png");
         posPlat = new Vector2(x, y);
     }
 
-    public void fall(float dt) {
+    public void fall() {
         posPlat.y -= 8;
-        if(posPlat.y < 0) {
-            if(rand.nextInt(5)==0){
-                posPlat.y = 1920 - 8;
-                posPlat = new Vector2(rand.nextInt(Main.WIDTH - platwidth), 1920 - 8);
-                if(rand.nextInt(2)==0) {
-                    posPlatDest = new Vector2(rand.nextInt((int) (Main.WIDTH - posPlat.x-platform.getWidth()-30))+posPlat.x+platform.getWidth()+30, 1920 - 8);
-                }
-                else{
-                    posPlatDest = new Vector2(rand.nextInt((int) (posPlat.x-platwidth-30)), 1920 - 8);
-                }
+
+    }
+    public void generate(){
+        if (posPlat.y < 0) {
+            if (rand.nextInt(3) == 0) {
+                IsPlatDest = true;
+            } else {
+                IsPlatDest = false;
             }
-            else {
-                posPlat.y = 1920 - 8;
-                posPlat = new Vector2(rand.nextInt(Main.WIDTH - platwidth), 1920 - 8);
-            }
+            posPlat = new Vector2(rand.nextInt(Main.WIDTH - platwidth), 1920 - 8);
         }
     }
 }

@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.Main;
+import com.mygdx.game.Sprites.DestroyPlatform;
 import com.mygdx.game.Sprites.Doodle;
 import com.mygdx.game.Sprites.Platform;
 
@@ -22,7 +23,8 @@ public class PlayState extends State {
     private Doodle doodle;
     private Texture background;
     private Array<Platform> platforms;
-    Texture doodletexture=new Texture("DoodleJump.png");
+    private Array<DestroyPlatform> DestPlatforms;
+    Texture doodletexture = new Texture("DoodleJump.png");
     boolean available = Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer);
 
     public PlayState(GameStateManager gsm) {
@@ -30,70 +32,81 @@ public class PlayState extends State {
 
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("TNR.ttf"));
         FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-        parameter.size=60;
+        parameter.size = 60;
         parameter.borderColor = Color.BLACK;
         parameter.borderWidth = 3;
         font = generator.generateFont(parameter); // font size 12 pixels
         generator.dispose();
 
-        doodle = new Doodle(Main.WIDTH/2-doodletexture.getWidth()/2, 200);
+        doodle = new Doodle(Main.WIDTH / 2 - doodletexture.getWidth() / 2, 200);
         camera.setToOrtho(false, Main.WIDTH, Main.HEIGHT);
         background = new Texture("background.png");
 
         platforms = new Array<Platform>();
+        DestPlatforms = new Array<DestroyPlatform>();
 
         for (int i = 0; i < Platform_Count; i++) {
-            if(i==0){
-                platforms.add(new Platform(doodle.getPosition().x,0));
-            }
-            else {
+            if (i == 0) {
+                platforms.add(new Platform(doodle.getPosition().x, 0));
+            } else {
                 platforms.add(new Platform(i * Platform_Spacing));
             }
         }
 
+        for (int i = 0; i < Platform_Count; i++) {
+            DestPlatforms.add(new DestroyPlatform(1920-8));
+        }
     }
 
     @Override
     public void handleInpute() {
     }
 
+
     @Override
     public void update(float dt) {
-        if(doodle.getPosition().y >= 600){
-            doodle.fall(dt);
+        if (doodle.getPosition().y >= 600) {
+            doodle.fall();
             record++;
-            for(Platform platform : platforms){
-                platform.fall(dt);
+            for (int i = 0; i < platforms.size; i++) {
+                if (platforms.get(i).IsPlatDest) {
+                    DestPlatforms.get(i).fall();
+                }
+                platforms.get(i).fall();
             }
         }
 
-
-
-//        for(Platform platform : platforms){
-//            platform.fall(dt, doodle.getPosition().y, doodle.getVelocity().y);
-//        }
-
         if (available) {
             float gyroY = Gdx.input.getAccelerometerX();
-            System.out.println(gyroY +" puk");
-            doodle.move(gyroY*4);
+            doodle.move(gyroY * 4);
         }
 
         handleInpute();
         doodle.update(dt);
 
-        for(Platform platform: platforms){
-            if((((doodle.getPosition().y>=platform.getPosPlat().y) && (doodle.getPosition().y<=platform.getPosPlat().y+ platform.getPlatform().getHeight()))&&
-                    ((doodle.getPosition().x+doodle.getDoodle().getWidth()>=platform.getPosPlat().x) && (doodle.getPosition().x<=platform.getPosPlat().x+platform.getPlatform().getWidth())))&& doodle.getVelocity().y<=0){
+        for (int i = 0; i < platforms.size; i++) {
+            if ((((doodle.getPosition().y >= platforms.get(i).getPosPlat().y) && (doodle.getPosition().y <= platforms.get(i).getPosPlat().y + platforms.get(i).getPlatform().getHeight())) &&
+                    ((doodle.getPosition().x + doodle.getDoodle().getWidth() >= platforms.get(i).getPosPlat().x) && (doodle.getPosition().x <= platforms.get(i).getPosPlat().x + platforms.get(i).getPlatform().getWidth()))) && doodle.getVelocity().y <= 0) {
                 doodle.jump();
+            }
+            if (platforms.get(i).IsPlatDest) {
+                if ((((doodle.getPosition().y >= DestPlatforms.get(i).getPosPlatDest().y) && (doodle.getPosition().y <= DestPlatforms.get(i).getPosPlatDest().y + DestPlatforms.get(i).getDestPlatform().getHeight())) &&
+                        ((doodle.getPosition().x + doodle.getDoodle().getWidth() >= DestPlatforms.get(i).getPosPlatDest().x) && (doodle.getPosition().x <= DestPlatforms.get(i).getPosPlatDest().x + DestPlatforms.get(i).getDestPlatform().getWidth()))) && doodle.getVelocity().y <= 0) {
+                    doodle.jump();
+                    DestPlatforms.get(i).posPlatDest.y = -100;
+                    platforms.get(i).IsPlatDest = false;
+                }
             }
         }
 
 
-        if(doodle.getPosition().y<=-doodle.getDoodle().getHeight())
-        {
-            gsm.set(new DieState(gsm,record));
-            record=0;
+        if (doodle.getPosition().y <= -doodle.getDoodle().getHeight()) {
+            gsm.set(new DieState(gsm, record));
+            record = 0;
+        }
+        for (int i = 0; i < platforms.size; i++) {
+            platforms.get(i).generate();
+            DestPlatforms.get(i).generate((int) platforms.get(i).getPosPlat().x);
         }
     }
 
@@ -103,10 +116,13 @@ public class PlayState extends State {
         sb.begin();
         sb.draw(background, 0, 0, Main.WIDTH, Main.HEIGHT);
         sb.draw(doodle.getDoodle(), doodle.getPosition().x, doodle.getPosition().y);
-        for (Platform platform : platforms) {
-            sb.draw(platform.getPlatform(), platform.getPosPlat().x, platform.getPosPlat().y);
+        for (int i = 0; i < platforms.size; i++) {
+            sb.draw(platforms.get(i).getPlatform(), platforms.get(i).getPosPlat().x, platforms.get(i).getPosPlat().y);
+            if (platforms.get(i).IsPlatDest) {
+                sb.draw(DestPlatforms.get(i).getDestPlatform(), DestPlatforms.get(i).getPosPlatDest().x, DestPlatforms.get(i).getPosPlatDest().y);
+            }
         }
-        font.draw(sb,String.valueOf(record),40,1880);
+        font.draw(sb, String.valueOf(record), 40, 1880);
         sb.end();
     }
 
@@ -114,8 +130,11 @@ public class PlayState extends State {
     public void dispose() {
         background.dispose();
         doodle.getDoodle().dispose();
-        for(Platform platform: platforms){
+        for (Platform platform : platforms) {
             platform.getPlatform().dispose();
+        }
+        for (DestroyPlatform destroyPlatform : DestPlatforms) {
+            destroyPlatform.getDestPlatform().dispose();
         }
     }
 }
