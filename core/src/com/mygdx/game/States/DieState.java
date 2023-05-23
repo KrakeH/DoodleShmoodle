@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.mygdx.game.Main;
 import com.mygdx.game.Sprites.Doodle;
-import com.mygdx.game.Sprites.Platform;
 
 public class DieState extends State{
     private Texture background;

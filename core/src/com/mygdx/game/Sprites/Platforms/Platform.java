@@ -1,4 +1,4 @@
-package com.mygdx.game.Sprites;
+package com.mygdx.game.Sprites.Platforms;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
@@ -8,10 +8,9 @@ import java.util.Random;
 
 public class Platform {
     private Texture platform;
-    private Texture platDestroy;
     private Vector2 posPlat;
     private Random rand;
-    private int platwidth = 120;
+    public boolean IsPlat=true;
 
     public Texture getPlatform() {
         return platform;
@@ -29,7 +28,7 @@ public class Platform {
         this();
         platform = new Texture("Platform.png");
         rand = new Random();
-        posPlat = new Vector2(rand.nextInt(Main.WIDTH - platwidth), y);
+        posPlat = new Vector2(rand.nextInt(Main.WIDTH - Main.platwidth), y);
     }
 
     public Platform(float x, float y) {
@@ -40,11 +39,14 @@ public class Platform {
 
     public void fall() {
         posPlat.y -= 8;
-
+    }
+    public void speedFall() {
+        posPlat.y -= 8;
     }
     public void generate(){
         if (posPlat.y < 0) {
-            posPlat = new Vector2(rand.nextInt(Main.WIDTH - platwidth), 1920 - 8);
+            IsPlat=true;
+            posPlat = new Vector2(rand.nextInt(Main.WIDTH - Main.platwidth), Main.HEIGHT);
         }
     }
 }

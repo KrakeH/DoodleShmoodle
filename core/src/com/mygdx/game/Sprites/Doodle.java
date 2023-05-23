@@ -8,9 +8,9 @@ public class Doodle {
     public static final int Gravity = -20;
     private Vector3 position;
     private Vector3 velocity;
-
+    private float Timer=3;
     private Texture doodle;
-    private boolean haveHat=false;
+    public boolean HaveCap=true;
     public Doodle(float x, float y) {
         position = new Vector3(x, y, 0);
         velocity = new Vector3(0, 0, 0);
@@ -19,6 +19,9 @@ public class Doodle {
 
     public Vector3 getPosition() {
         return position;
+    }
+    public float getTimer() {
+        return Timer;
     }
 
     public Vector3 getVelocity() {
@@ -53,5 +56,13 @@ public class Doodle {
 
     public void fall() {
         position.y -= 8;
+    }
+
+    public void fly(float dt){
+        Timer-=dt;
+        velocity.y=0;
+    }
+    public void resetTimer(){
+        Timer=3;
     }
 }
