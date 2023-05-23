@@ -26,7 +26,7 @@ public class DieState extends State{
     Texture doodletexture=new Texture("DoodleJump.png");
     Preferences prefs = Gdx.app.getPreferences("game preferences");
 
-    public DieState(GameStateManager gsm,int record) {
+    public DieState(GameStateManager gsm,int record,float x) {
         super(gsm);
         this.record=record;
         if (record > highscore) {
@@ -34,7 +34,7 @@ public class DieState extends State{
             prefs.flush();
         }
         highscore = prefs.getInteger("highscore");
-        doodle = new Doodle(Main.WIDTH/2-doodletexture.getWidth()/2, 1920);
+        doodle = new Doodle(x, 1920);
         camera.setToOrtho(false, Main.WIDTH, Main.HEIGHT);
         background = new Texture("background.png");
         playButton = new Texture("playbtn.png");

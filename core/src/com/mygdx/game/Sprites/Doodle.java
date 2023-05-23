@@ -10,7 +10,7 @@ public class Doodle {
     private Vector3 velocity;
 
     private Texture doodle;
-
+    private boolean haveHat=false;
     public Doodle(float x, float y) {
         position = new Vector3(x, y, 0);
         velocity = new Vector3(0, 0, 0);

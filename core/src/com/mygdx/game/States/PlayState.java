@@ -51,10 +51,7 @@ public class PlayState extends State {
             } else {
                 platforms.add(new Platform(i * Platform_Spacing));
             }
-        }
-
-        for (int i = 0; i < Platform_Count; i++) {
-            DestPlatforms.add(new DestroyPlatform(1920-8));
+            DestPlatforms.add(new DestroyPlatform(platforms.get(i).getPosPlat().y, platforms.get(i).getPosPlat().x));
         }
     }
 
@@ -65,13 +62,14 @@ public class PlayState extends State {
 
     @Override
     public void update(float dt) {
+        for (int i = 0; i < platforms.size; i++) {
+            System.out.println("platform "+i+":"+DestPlatforms.get(i).getPosPlatDest());
+        }
         if (doodle.getPosition().y >= 600) {
             doodle.fall();
             record++;
             for (int i = 0; i < platforms.size; i++) {
-                if (platforms.get(i).IsPlatDest) {
-                    DestPlatforms.get(i).fall();
-                }
+                DestPlatforms.get(i).fall();
                 platforms.get(i).fall();
             }
         }
@@ -89,19 +87,16 @@ public class PlayState extends State {
                     ((doodle.getPosition().x + doodle.getDoodle().getWidth() >= platforms.get(i).getPosPlat().x) && (doodle.getPosition().x <= platforms.get(i).getPosPlat().x + platforms.get(i).getPlatform().getWidth()))) && doodle.getVelocity().y <= 0) {
                 doodle.jump();
             }
-            if (platforms.get(i).IsPlatDest) {
-                if ((((doodle.getPosition().y >= DestPlatforms.get(i).getPosPlatDest().y) && (doodle.getPosition().y <= DestPlatforms.get(i).getPosPlatDest().y + DestPlatforms.get(i).getDestPlatform().getHeight())) &&
-                        ((doodle.getPosition().x + doodle.getDoodle().getWidth() >= DestPlatforms.get(i).getPosPlatDest().x) && (doodle.getPosition().x <= DestPlatforms.get(i).getPosPlatDest().x + DestPlatforms.get(i).getDestPlatform().getWidth()))) && doodle.getVelocity().y <= 0) {
-                    doodle.jump();
-                    DestPlatforms.get(i).posPlatDest.y = -100;
-                    platforms.get(i).IsPlatDest = false;
-                }
+            if (((((doodle.getPosition().y >= DestPlatforms.get(i).getPosPlatDest().y) && (doodle.getPosition().y <= DestPlatforms.get(i).getPosPlatDest().y + DestPlatforms.get(i).getDestPlatform().getHeight())) &&
+                    ((doodle.getPosition().x + doodle.getDoodle().getWidth() >= DestPlatforms.get(i).getPosPlatDest().x) && (doodle.getPosition().x <= DestPlatforms.get(i).getPosPlatDest().x + DestPlatforms.get(i).getDestPlatform().getWidth()))) && doodle.getVelocity().y <= 0)&& DestPlatforms.get(i).IsPlatDest) {
+                doodle.jump();
+                DestPlatforms.get(i).IsPlatDest=false;
             }
         }
 
 
         if (doodle.getPosition().y <= -doodle.getDoodle().getHeight()) {
-            gsm.set(new DieState(gsm, record));
+            gsm.set(new DieState(gsm, record,doodle.getPosition().x));
             record = 0;
         }
         for (int i = 0; i < platforms.size; i++) {
@@ -118,7 +113,7 @@ public class PlayState extends State {
         sb.draw(doodle.getDoodle(), doodle.getPosition().x, doodle.getPosition().y);
         for (int i = 0; i < platforms.size; i++) {
             sb.draw(platforms.get(i).getPlatform(), platforms.get(i).getPosPlat().x, platforms.get(i).getPosPlat().y);
-            if (platforms.get(i).IsPlatDest) {
+            if (DestPlatforms.get(i).IsPlatDest) {
                 sb.draw(DestPlatforms.get(i).getDestPlatform(), DestPlatforms.get(i).getPosPlatDest().x, DestPlatforms.get(i).getPosPlatDest().y);
             }
         }

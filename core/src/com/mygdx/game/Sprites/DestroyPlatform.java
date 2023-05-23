@@ -11,6 +11,7 @@ public class DestroyPlatform {
     private Random rand;
     private int platwidth = 120;
     public Vector2 posPlatDest;
+    public boolean IsPlatDest = false;
 
     public Texture getDestPlatform() {
         return DestPlatform;
@@ -24,11 +25,22 @@ public class DestroyPlatform {
         rand = new Random();
     }
 
-    public DestroyPlatform(float y) {
+    public DestroyPlatform(float y,float x) {
         this();
         DestPlatform = new Texture("PlatDestroy.png");
         rand = new Random();
-        posPlatDest = new Vector2(rand.nextInt(Main.WIDTH - platwidth), y);
+
+        posPlatDest=new Vector2();
+
+        float freeSpaceRight = Main.WIDTH - platwidth - x - 50;
+        posPlatDest.y=y;
+        if (freeSpaceRight > platwidth) {
+            posPlatDest.x = x + platwidth + 50 + rand.nextInt((int) freeSpaceRight - platwidth);
+        } else if (x - 50 > platwidth) {
+            posPlatDest.x = rand.nextInt((int) (x - 50 - platwidth));
+        }
+
+        IsPlatDest = rand.nextInt(3) == 0;
     }
 
     public void fall() {
@@ -36,12 +48,14 @@ public class DestroyPlatform {
     }
 
     public void generate(int x) {
-        if(posPlatDest.y<0) {
-            posPlatDest.x=rand.nextInt(Main.WIDTH-2*platwidth)+x;
-            if(posPlatDest.x>Main.WIDTH){
-                posPlatDest.x-=Main.WIDTH;
-            } else if (posPlatDest.x>Main.WIDTH-platwidth) {
-                posPlatDest.x=0;
+        if (posPlatDest.y < 0) {
+            IsPlatDest = rand.nextInt(3) == 0;
+            posPlatDest.y = 1920 - 8;
+            float freeSpaceRight = Main.WIDTH - platwidth - x - 50;
+            if (freeSpaceRight > platwidth) {
+                posPlatDest.x = x + platwidth + 50 + rand.nextInt((int) freeSpaceRight - platwidth);
+            } else if (x - 50 > platwidth) {
+                posPlatDest.x = rand.nextInt(x - 50 - platwidth);
             }
         }
 

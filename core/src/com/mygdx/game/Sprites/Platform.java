@@ -12,8 +12,6 @@ public class Platform {
     private Vector2 posPlat;
     private Random rand;
     private int platwidth = 120;
-    private DestroyPlatform destroyPlatform;
-    public boolean IsPlatDest = false;
 
     public Texture getPlatform() {
         return platform;
@@ -31,11 +29,6 @@ public class Platform {
         this();
         platform = new Texture("Platform.png");
         rand = new Random();
-//        if (rand.nextInt(3) == 0) {
-//            IsPlatDest = true;
-//        } else {
-//            IsPlatDest = false;
-//        }
         posPlat = new Vector2(rand.nextInt(Main.WIDTH - platwidth), y);
     }
 
@@ -51,11 +44,6 @@ public class Platform {
     }
     public void generate(){
         if (posPlat.y < 0) {
-            if (rand.nextInt(3) == 0) {
-                IsPlatDest = true;
-            } else {
-                IsPlatDest = false;
-            }
             posPlat = new Vector2(rand.nextInt(Main.WIDTH - platwidth), 1920 - 8);
         }
     }
