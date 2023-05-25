@@ -28,6 +28,7 @@ public class CloudPlatform {
         this();
         CloudPlat = new Texture("PlatCloud.png");
         rand = new Random();
+        IsPlatCloud = rand.nextInt(6) == 0;
         posPlatCloud=new Vector2();
         float freeSpaceRight = Main.WIDTH - Main.platwidth - x - 50;
         posPlatCloud.y=y;
@@ -40,12 +41,15 @@ public class CloudPlatform {
 
     public void fall() {
         posPlatCloud.y -= 8;
-
     }
+    public void speedFall() {
+        posPlatCloud.y -= 24;
+    }
+
     public void generate(int x){
         if (posPlatCloud.y < 0) {
             posPlatCloud.y=Main.HEIGHT;
-            IsPlatCloud = rand.nextInt(3) == 0;
+            IsPlatCloud = rand.nextInt(6) == 0;
             float freeSpaceRight = Main.WIDTH - Main.platwidth - x - 50;
             if (freeSpaceRight > Main.platwidth) {
                 posPlatCloud.x = x + Main.platwidth + 50 + rand.nextInt((int) freeSpaceRight - Main.platwidth);

@@ -12,24 +12,23 @@ import com.mygdx.game.Main;
 import com.mygdx.game.Sprites.Doodle;
 
 public class DieState extends State{
+    Preferences prefs = Gdx.app.getPreferences("game preferences");
     private Texture background;
     private Texture playButton;
     private Doodle doodle;
     private int record;
     private float bestRecord;
     private float nowRecord;
-    private int highscore;
+    private int highscore=prefs.getInteger("highscore");
     GlyphLayout layout = new GlyphLayout(); //dont do this every frame! Store it as member
 
     BitmapFont font;
-    Texture doodletexture=new Texture("DoodleJump.png");
-    Preferences prefs = Gdx.app.getPreferences("game preferences");
-
     public DieState(GameStateManager gsm,int record,float x) {
         super(gsm);
         this.record=record;
         if (record > highscore) {
-            prefs.putInteger("highscore", record);
+            highscore=record;
+            prefs.putInteger("highscore",highscore);
             prefs.flush();
         }
         highscore = prefs.getInteger("highscore");

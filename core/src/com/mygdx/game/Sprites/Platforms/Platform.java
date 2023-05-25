@@ -41,7 +41,7 @@ public class Platform {
         posPlat.y -= 8;
     }
     public void speedFall() {
-        posPlat.y -= 8;
+        posPlat.y -= 24;
     }
     public void generate(){
         if (posPlat.y < 0) {

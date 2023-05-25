@@ -36,7 +36,7 @@ public class DestroyPlatform {
         posPlatDest.y -= 8;
     }
     public void speedFall() {
-        posPlatDest.y -= 8;
+        posPlatDest.y -= 24;
     }
 
     public void generate() {

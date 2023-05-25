@@ -10,7 +10,7 @@ public class Doodle {
     private Vector3 velocity;
     private float Timer=3;
     private Texture doodle;
-    public boolean HaveCap=true;
+    public boolean HaveCap=false;
     public Doodle(float x, float y) {
         position = new Vector3(x, y, 0);
         velocity = new Vector3(0, 0, 0);
@@ -60,6 +60,10 @@ public class Doodle {
 
     public void fly(float dt){
         Timer-=dt;
+        velocity.add(0,-Gravity, 0);
+        velocity.scl(dt);
+        position.add(0, velocity.y, 0);
+        position.y+=1;
         velocity.y=0;
     }
     public void resetTimer(){

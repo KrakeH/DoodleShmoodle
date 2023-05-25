@@ -10,7 +10,7 @@ import com.mygdx.game.States.MenuState;
 
 public class Main extends ApplicationAdapter {
 
-    public static int platwidth =120;
+    public static final int platwidth =120;
     public static int WIDTH = 1080;
     public static int HEIGHT = 1920;
     private GameStateManager gsm;
