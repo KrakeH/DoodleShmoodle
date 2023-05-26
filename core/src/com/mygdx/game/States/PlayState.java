@@ -20,6 +20,8 @@ public class PlayState extends State {
 
     public static final int Platform_Spacing = 120;
     public static final int Platform_Count = 16;
+    private boolean RightMove=false;
+    private boolean LeftMove=true;
     BitmapFont font;
     private float gyroY;
     public float record = 0;
@@ -100,6 +102,15 @@ public class PlayState extends State {
             doodle.move(gyroY * 4);
         }
 
+        //
+        if(gyroY>=0.2){
+            RightMove=true;
+            LeftMove=false;
+        }
+        else if(gyroY<=-0.2){
+            RightMove=false;
+            LeftMove=true;
+        }
         //Hat
         if(doodle.getTimer()>0 && doodle.HaveCap){
             doodle.fly(dt);
@@ -197,16 +208,11 @@ public class PlayState extends State {
             }
         }
         System.out.println(gyroY);
-        if(gyroY>=-0.1 && gyroY<=0.1) {
-            sb.draw(doodle.NowTexture, doodle.getPosition().x, doodle.getPosition().y);
+        if(RightMove){
+            sb.draw(doodle.getDoodleRight(),doodle.getPosition().x,doodle.getPosition().y);
         }
-        else if(gyroY>=0.1){
-            sb.draw(doodle.getDoodleRight(), doodle.getPosition().x, doodle.getPosition().y);
-            doodle.NowTexture=doodle.getDoodleRight();
-        }
-        else if (gyroY<=-0.1){
-            sb.draw(doodle.getDoodleLeft(), doodle.getPosition().x, doodle.getPosition().y);
-            doodle.NowTexture=doodle.getDoodleLeft();
+        else if(LeftMove){
+            sb.draw(doodle.getDoodleLeft(),doodle.getPosition().x,doodle.getPosition().y);
         }
         font.draw(sb, String.valueOf((int)record), 40, 1880);
         sb.end();

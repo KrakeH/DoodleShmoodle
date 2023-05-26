@@ -12,7 +12,6 @@ public class Doodle {
     private Texture doodleRight;
     private Texture doodleLeft;
     private Texture doodle;
-    public Texture NowTexture;
     public boolean HaveCap=false;
     public Doodle(float x, float y) {
         position = new Vector3(x, y, 0);
@@ -20,7 +19,6 @@ public class Doodle {
         doodleRight = new Texture("DoodleJumpLeft.png");
         doodleLeft = new Texture("DoodleJumpRight.png");
         doodle = new Texture("DoodleJumpLeft.png");
-        NowTexture=new Texture("DoodleJumpLeft.png");
     }
 
     public Vector3 getPosition() {
