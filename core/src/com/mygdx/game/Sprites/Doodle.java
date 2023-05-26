@@ -9,12 +9,18 @@ public class Doodle {
     private Vector3 position;
     private Vector3 velocity;
     private float Timer=3;
+    private Texture doodleRight;
+    private Texture doodleLeft;
     private Texture doodle;
+    private Texture NowTexture;
     public boolean HaveCap=false;
     public Doodle(float x, float y) {
         position = new Vector3(x, y, 0);
         velocity = new Vector3(0, 0, 0);
-        doodle = new Texture("DoodleJump.png");
+        doodleRight = new Texture("DoodleJumpLeft.png");
+        doodleLeft = new Texture("DoodleJumpRight.png");
+        doodle = new Texture("DoodleJumpLeft.png");
+        NowTexture=new Texture("DoodleJumpLeft.png");
     }
 
     public Vector3 getPosition() {
@@ -31,8 +37,23 @@ public class Doodle {
     public Texture getDoodle() {
         return doodle;
     }
+    public Texture getDoodleRight() {
+        return doodleRight;
+    }
+    public Texture getNowTexture(){
+        return NowTexture;
+    }
+    public Texture getDoodleLeft() {
+        return doodleLeft;
+    }
 
-    public void update(float dt) {
+    public void update(float dt,float gyroY) {
+        if(gyroY>=0){
+            NowTexture=doodleRight;
+        }
+        else{
+            NowTexture=doodleLeft;
+        }
         velocity.add(0, Gravity, 0);
         velocity.scl(dt);
         position.add(0, velocity.y, 0);

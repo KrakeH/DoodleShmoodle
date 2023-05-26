@@ -62,7 +62,7 @@ public class DieState extends State{
     @Override
     public void update(float dt) {
         handleInpute();
-        doodle.update(dt);
+        doodle.update(dt,0);
     }
 
     @Override

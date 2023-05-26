@@ -43,7 +43,7 @@ public class CloudPlatform {
         posPlatCloud.y -= 8;
     }
     public void speedFall() {
-        posPlatCloud.y -= 24;
+        posPlatCloud.y -= 16;
     }
 
     public void generate(int x){

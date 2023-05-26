@@ -21,6 +21,7 @@ public class PlayState extends State {
     public static final int Platform_Spacing = 120;
     public static final int Platform_Count = 16;
     BitmapFont font;
+    private float gyroY;
     public float record = 0;
     private Doodle doodle;
     private Texture background;
@@ -28,7 +29,7 @@ public class PlayState extends State {
     private Array<CloudPlatform> CloudPlatforms;
     private Array<DestroyPlatform> DestPlatforms;
     private Array<Hat> Hats;
-    Texture doodletexture = new Texture("DoodleJump.png");
+    Texture doodletexture = new Texture("DoodleJumpLeft.png");
     boolean available = Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer);
 
     public PlayState(GameStateManager gsm) {
@@ -94,6 +95,11 @@ public class PlayState extends State {
 
     @Override
     public void update(float dt) {
+        if (available) {
+            gyroY = Gdx.input.getAccelerometerX();
+            doodle.move(gyroY * 4);
+        }
+
         //Hat
         if(doodle.getTimer()>0 && doodle.HaveCap){
             doodle.fly(dt);
@@ -109,7 +115,7 @@ public class PlayState extends State {
             doodle.HaveCap=false;
             doodle.resetTimer();
         }
-        doodle.update(dt);
+        doodle.update(dt,gyroY);
 
         for (int i = 0; i < Platform_Count; i++) {
             if (DestPlatforms.get(i).IsPlatDest) {
@@ -128,15 +134,10 @@ public class PlayState extends State {
                 }
             }
         }
-
-        if (available) {
-            float gyroY = Gdx.input.getAccelerometerX();
-            doodle.move(gyroY * 4);
-        }
         if(!doodle.HaveCap) {
             for (int i = 0; i < platforms.size; i++) {
                 if (((((doodle.getPosition().y >= platforms.get(i).getPosPlat().y) && (doodle.getPosition().y <= platforms.get(i).getPosPlat().y + platforms.get(i).getPlatform().getHeight())) &&
-                        ((doodle.getPosition().x + doodle.getDoodle().getWidth() >= platforms.get(i).getPosPlat().x) && (doodle.getPosition().x <= platforms.get(i).getPosPlat().x + platforms.get(i).getPlatform().getWidth()))) && doodle.getVelocity().y <= 0) && platforms.get(i).IsPlat && !Hats.get(i).IsHat) {
+                        ((doodle.getPosition().x + doodle.getDoodle().getWidth() >= platforms.get(i).getPosPlat().x) && (doodle.getPosition().x <= platforms.get(i).getPosPlat().x + platforms.get(i).getPlatform().getWidth()))) && doodle.getVelocity().y <= 0) && platforms.get(i).IsPlat ) {
                     doodle.jump();
                 }
                 if (((((doodle.getPosition().y >= DestPlatforms.get(i).getPosPlatDest().y) && (doodle.getPosition().y <= DestPlatforms.get(i).getPosPlatDest().y + DestPlatforms.get(i).getDestPlatform().getHeight())) &&
@@ -148,9 +149,10 @@ public class PlayState extends State {
                         ((doodle.getPosition().x + doodle.getDoodle().getWidth() >= CloudPlatforms.get(i).getPosPlatCloud().x) && (doodle.getPosition().x <= CloudPlatforms.get(i).getPosPlatCloud().x + CloudPlatforms.get(i).getCloudPlatform().getWidth()))) && doodle.getVelocity().y <= 0) && CloudPlatforms.get(i).IsPlatCloud) {
                     CloudPlatforms.get(i).IsPlatCloud = false;
                 }
-                if (((((doodle.getPosition().y >= platforms.get(i).getPosPlat().y) && (doodle.getPosition().y <= platforms.get(i).getPosPlat().y + platforms.get(i).getPlatform().getHeight())) &&
-                        ((doodle.getPosition().x + doodle.getDoodle().getWidth() >= platforms.get(i).getPosPlat().x) && (doodle.getPosition().x <= platforms.get(i).getPosPlat().x + platforms.get(i).getPlatform().getWidth()))) && doodle.getVelocity().y <= 0) && platforms.get(i).IsPlat && Hats.get(i).IsHat) {
+                if ((Hats.get(i).getPosHat().x+Hats.get(i).getHat().getWidth()>=doodle.getPosition().x && Hats.get(i).getPosHat().x<=doodle.getPosition().x+doodle.getDoodle().getWidth()) &&
+                        (Hats.get(i).getPosHat().y+Hats.get(i).getHat().getHeight()>=doodle.getPosition().y && Hats.get(i).getPosHat().y<=doodle.getPosition().y+doodle.getDoodle().getHeight()) && Hats.get(i).IsHat && doodle.getVelocity().y<=0) {
                     doodle.HaveCap=true;
+                    Hats.get(i).IsHat=false;
                 }
             }
         }
@@ -180,7 +182,6 @@ public class PlayState extends State {
         sb.setProjectionMatrix(camera.combined);
         sb.begin();
         sb.draw(background, 0, 0, Main.WIDTH, Main.HEIGHT);
-        sb.draw(doodle.getDoodle(), doodle.getPosition().x, doodle.getPosition().y);
         for (int i = 0; i < platforms.size; i++) {
             if(platforms.get(i).IsPlat) {
                 sb.draw(platforms.get(i).getPlatform(), platforms.get(i).getPosPlat().x, platforms.get(i).getPosPlat().y);
@@ -194,6 +195,15 @@ public class PlayState extends State {
             if (Hats.get(i).IsHat && platforms.get(i).IsPlat) {
                 sb.draw(Hats.get(i).getHat(), Hats.get(i).getPosHat().x, Hats.get(i).getPosHat().y);
             }
+        }
+        if(gyroY>=-0.1 && gyroY<0.1) {
+            sb.draw(doodle.getNowTexture(), doodle.getPosition().x, doodle.getPosition().y);
+        }
+        else if(gyroY>=0.1){
+            sb.draw(doodle.getDoodleRight(), doodle.getPosition().x, doodle.getPosition().y);
+        }
+        else{
+            sb.draw(doodle.getDoodleLeft(), doodle.getPosition().x, doodle.getPosition().y);
         }
         font.draw(sb, String.valueOf((int)record), 40, 1880);
         sb.end();

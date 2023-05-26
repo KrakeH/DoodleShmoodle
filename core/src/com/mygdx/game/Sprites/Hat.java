@@ -28,7 +28,6 @@ public class Hat {
         this();
         Hat = new Texture("Cap.png");
         rand = new Random();
-        IsHat=rand.nextInt(50) == 0;
         posHat = new Vector2(x,y+30);
     }
 
@@ -36,12 +35,12 @@ public class Hat {
         posHat.y -= 8;
     }
     public void speedFall() {
-        posHat.y -= 24;
+        posHat.y -= 16;
     }
     public void generate(float x,float y){
         if (posHat.y < 0) {
-            IsHat=rand.nextInt(50) == 0;
-            posHat = new Vector2(x,y+30);
+            IsHat=rand.nextInt(100) == 0;
+            posHat = new Vector2(x+Main.platwidth/2-Hat.getWidth()/2,y+30);
         }
     }
 }
