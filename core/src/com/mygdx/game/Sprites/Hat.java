@@ -40,7 +40,7 @@ public class Hat {
     public void generate(float x,float y){
         if (posHat.y < 0) {
             IsHat=rand.nextInt(100) == 0;
-            posHat = new Vector2(x+Main.platwidth/2-Hat.getWidth()/2,y+30);
+            posHat = new Vector2(x+Main.platwidth/2-Hat.getWidth()/2,y+48);
         }
     }
 }
