@@ -12,7 +12,7 @@ public class Doodle {
     private Texture doodleRight;
     private Texture doodleLeft;
     private Texture doodle;
-    private Texture NowTexture;
+    public Texture NowTexture;
     public boolean HaveCap=false;
     public Doodle(float x, float y) {
         position = new Vector3(x, y, 0);
@@ -40,20 +40,11 @@ public class Doodle {
     public Texture getDoodleRight() {
         return doodleRight;
     }
-    public Texture getNowTexture(){
-        return NowTexture;
-    }
     public Texture getDoodleLeft() {
         return doodleLeft;
     }
 
     public void update(float dt,float gyroY) {
-        if(gyroY>=0){
-            NowTexture=doodleRight;
-        }
-        else{
-            NowTexture=doodleLeft;
-        }
         velocity.add(0, Gravity, 0);
         velocity.scl(dt);
         position.add(0, velocity.y, 0);

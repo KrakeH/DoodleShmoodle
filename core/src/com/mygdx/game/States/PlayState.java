@@ -196,14 +196,17 @@ public class PlayState extends State {
                 sb.draw(Hats.get(i).getHat(), Hats.get(i).getPosHat().x, Hats.get(i).getPosHat().y);
             }
         }
-        if(gyroY>=-0.1 && gyroY<0.1) {
-            sb.draw(doodle.getNowTexture(), doodle.getPosition().x, doodle.getPosition().y);
+        System.out.println(gyroY);
+        if(gyroY>=-0.1 && gyroY<=0.1) {
+            sb.draw(doodle.NowTexture, doodle.getPosition().x, doodle.getPosition().y);
         }
         else if(gyroY>=0.1){
             sb.draw(doodle.getDoodleRight(), doodle.getPosition().x, doodle.getPosition().y);
+            doodle.NowTexture=doodle.getDoodleRight();
         }
-        else{
+        else if (gyroY<=-0.1){
             sb.draw(doodle.getDoodleLeft(), doodle.getPosition().x, doodle.getPosition().y);
+            doodle.NowTexture=doodle.getDoodleLeft();
         }
         font.draw(sb, String.valueOf((int)record), 40, 1880);
         sb.end();
