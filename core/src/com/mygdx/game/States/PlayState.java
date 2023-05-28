@@ -2,6 +2,7 @@ package com.mygdx.game.States;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -17,6 +18,8 @@ import com.mygdx.game.Sprites.Platforms.DestroyPlatform;
 import com.mygdx.game.Sprites.Doodle;
 import com.mygdx.game.Sprites.Platforms.Platform;
 
+import java.lang.management.MemoryUsage;
+
 public class PlayState extends State {
 
     public static final int Platform_Spacing = 120;
@@ -24,6 +27,7 @@ public class PlayState extends State {
     private boolean RightMove=false;
     private boolean LeftMove=true;
     private Sound sound;
+    private Music music;
     BitmapFont font;
     private float gyroY;
     public float record = 0;
@@ -38,13 +42,18 @@ public class PlayState extends State {
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
+
+        //audio
         sound=Gdx.audio.newSound(Gdx.files.internal("jump.mp3"));
+        music=Gdx.audio.newMusic(Gdx.files.internal("helicopter.mp3"));
+
+        //font
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("TNR.ttf"));
         FreeTypeFontParameter parameter = new FreeTypeFontParameter();
         parameter.size = 60;
         parameter.borderColor = Color.BLACK;
         parameter.borderWidth = 3;
-        font = generator.generateFont(parameter); // font size 12 pixels
+        font = generator.generateFont(parameter);
         generator.dispose();
 
         doodle = new Doodle(Main.WIDTH / 2 - doodletexture.getWidth() / 2, 200);
@@ -107,6 +116,13 @@ public class PlayState extends State {
         }
 
         //
+        if(doodle.HaveCap){
+            music.play();
+        }
+        else{
+            music.stop();
+        }
+        //rotation
         if(gyroY>=0.2){
             RightMove=true;
             LeftMove=false;
