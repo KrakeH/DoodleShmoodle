@@ -158,6 +158,7 @@ public class PlayState extends State {
                 }
                 if (((((doodle.getPosition().y >= DestPlatforms.get(i).getPosPlatDest().y) && (doodle.getPosition().y <= DestPlatforms.get(i).getPosPlatDest().y + DestPlatforms.get(i).getDestPlatform().getHeight())) &&
                         ((doodle.getPosition().x + doodle.getDoodle().getWidth() >= DestPlatforms.get(i).getPosPlatDest().x) && (doodle.getPosition().x <= DestPlatforms.get(i).getPosPlatDest().x + DestPlatforms.get(i).getDestPlatform().getWidth()))) && doodle.getVelocity().y <= 0) && DestPlatforms.get(i).IsPlatDest) {
+                    DestPlatforms.get(i).IsPlatDest=false;
                     doodle.jump();
                     sound.play();
                 }
