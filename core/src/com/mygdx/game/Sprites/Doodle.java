@@ -11,6 +11,8 @@ public class Doodle {
     private float Timer=3;
     private Texture doodleRight;
     private Texture doodleLeft;
+    private Texture doodleRightFly;
+    private Texture doodleLeftFly;
     private Texture doodle;
     public boolean HaveCap=false;
     public Doodle(float x, float y) {
@@ -18,6 +20,8 @@ public class Doodle {
         velocity = new Vector3(0, 0, 0);
         doodleRight = new Texture("DoodleJumpLeft.png");
         doodleLeft = new Texture("DoodleJumpRight.png");
+        doodleRightFly = new Texture("DoodleJumpLeftFly.png");
+        doodleLeftFly = new Texture("DoodleJumpRightFly.png");
         doodle = new Texture("DoodleJumpLeft.png");
     }
 
@@ -40,6 +44,12 @@ public class Doodle {
     }
     public Texture getDoodleLeft() {
         return doodleLeft;
+    }
+    public Texture getDoodleRightFly() {
+        return doodleRightFly;
+    }
+    public Texture getDoodleLeftFly() {
+        return doodleLeftFly;
     }
 
     public void update(float dt,float gyroY) {
@@ -73,7 +83,7 @@ public class Doodle {
         velocity.add(0,-Gravity, 0);
         velocity.scl(dt);
         position.add(0, velocity.y, 0);
-        position.y+=1;
+        position.y+=2;
         velocity.y=0;
     }
     public void resetTimer(){

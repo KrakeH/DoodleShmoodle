@@ -2,6 +2,7 @@ package com.mygdx.game.States;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -22,6 +23,7 @@ public class PlayState extends State {
     public static final int Platform_Count = 16;
     private boolean RightMove=false;
     private boolean LeftMove=true;
+    private Sound sound;
     BitmapFont font;
     private float gyroY;
     public float record = 0;
@@ -36,7 +38,7 @@ public class PlayState extends State {
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
-
+        sound=Gdx.audio.newSound(Gdx.files.internal("jump.mp3"));
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("TNR.ttf"));
         FreeTypeFontParameter parameter = new FreeTypeFontParameter();
         parameter.size = 60;
@@ -78,6 +80,8 @@ public class PlayState extends State {
             }
             else if(i==0){
                 DestPlatforms.get(i).IsPlatDest=false;
+                CloudPlatforms.get(i).IsPlatCloud=false;
+                Hats.get(i).IsHat=false;
             }
         }
         for (int i = 0; i < Platform_Count; i++) {
@@ -150,18 +154,19 @@ public class PlayState extends State {
                 if (((((doodle.getPosition().y >= platforms.get(i).getPosPlat().y) && (doodle.getPosition().y <= platforms.get(i).getPosPlat().y + platforms.get(i).getPlatform().getHeight())) &&
                         ((doodle.getPosition().x + doodle.getDoodle().getWidth() >= platforms.get(i).getPosPlat().x) && (doodle.getPosition().x <= platforms.get(i).getPosPlat().x + platforms.get(i).getPlatform().getWidth()))) && doodle.getVelocity().y <= 0) && platforms.get(i).IsPlat ) {
                     doodle.jump();
+                    sound.play();
                 }
                 if (((((doodle.getPosition().y >= DestPlatforms.get(i).getPosPlatDest().y) && (doodle.getPosition().y <= DestPlatforms.get(i).getPosPlatDest().y + DestPlatforms.get(i).getDestPlatform().getHeight())) &&
                         ((doodle.getPosition().x + doodle.getDoodle().getWidth() >= DestPlatforms.get(i).getPosPlatDest().x) && (doodle.getPosition().x <= DestPlatforms.get(i).getPosPlatDest().x + DestPlatforms.get(i).getDestPlatform().getWidth()))) && doodle.getVelocity().y <= 0) && DestPlatforms.get(i).IsPlatDest) {
                     doodle.jump();
-                    DestPlatforms.get(i).IsPlatDest = false;
+                    sound.play();
                 }
                 if (((((doodle.getPosition().y >= CloudPlatforms.get(i).getPosPlatCloud().y) && (doodle.getPosition().y <= CloudPlatforms.get(i).getPosPlatCloud().y + CloudPlatforms.get(i).getCloudPlatform().getHeight())) &&
                         ((doodle.getPosition().x + doodle.getDoodle().getWidth() >= CloudPlatforms.get(i).getPosPlatCloud().x) && (doodle.getPosition().x <= CloudPlatforms.get(i).getPosPlatCloud().x + CloudPlatforms.get(i).getCloudPlatform().getWidth()))) && doodle.getVelocity().y <= 0) && CloudPlatforms.get(i).IsPlatCloud) {
                     CloudPlatforms.get(i).IsPlatCloud = false;
                 }
                 if ((Hats.get(i).getPosHat().x+Hats.get(i).getHat().getWidth()>=doodle.getPosition().x && Hats.get(i).getPosHat().x<=doodle.getPosition().x+doodle.getDoodle().getWidth()) &&
-                        (Hats.get(i).getPosHat().y+Hats.get(i).getHat().getHeight()>=doodle.getPosition().y && Hats.get(i).getPosHat().y<=doodle.getPosition().y+doodle.getDoodle().getHeight()) && Hats.get(i).IsHat && doodle.getVelocity().y<=0) {
+                        (Hats.get(i).getPosHat().y+Hats.get(i).getHat().getHeight()>=doodle.getPosition().y && Hats.get(i).getPosHat().y<=doodle.getPosition().y+doodle.getDoodle().getHeight()) && Hats.get(i).IsHat && doodle.getVelocity().y<0 && platforms.get(i).IsPlat) {
                     doodle.HaveCap=true;
                     Hats.get(i).IsHat=false;
                 }
@@ -207,8 +212,13 @@ public class PlayState extends State {
                 sb.draw(Hats.get(i).getHat(), Hats.get(i).getPosHat().x, Hats.get(i).getPosHat().y);
             }
         }
-        System.out.println(gyroY);
-        if(RightMove){
+        if(RightMove && doodle.HaveCap){
+            sb.draw(doodle.getDoodleRightFly(),doodle.getPosition().x,doodle.getPosition().y);
+        }
+        else if(LeftMove && doodle.HaveCap){
+            sb.draw(doodle.getDoodleLeftFly(),doodle.getPosition().x,doodle.getPosition().y);
+        }
+        else if(RightMove){
             sb.draw(doodle.getDoodleRight(),doodle.getPosition().x,doodle.getPosition().y);
         }
         else if(LeftMove){
