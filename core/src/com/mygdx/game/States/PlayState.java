@@ -196,10 +196,11 @@ public class PlayState extends State {
             if (DestPlatforms.get(i).IsPlatDest) {
                 CloudPlatforms.get(i).generate((int) DestPlatforms.get(i).getPosPlatDest().x);
             }
+            Hats.get(i).generate(platforms.get(i).getPosPlat().x, platforms.get(i).getPosPlat().y);
             if (DestPlatforms.get(i).IsPlatDest) {
                 platforms.get(i).IsPlat = false;
+                Hats.get(i).IsHat=false;
             }
-            Hats.get(i).generate(platforms.get(i).getPosPlat().x, platforms.get(i).getPosPlat().y);
         }
     }
 
@@ -218,7 +219,7 @@ public class PlayState extends State {
             if (CloudPlatforms.get(i).IsPlatCloud) {
                 sb.draw(CloudPlatforms.get(i).getCloudPlatform(), CloudPlatforms.get(i).getPosPlatCloud().x, CloudPlatforms.get(i).getPosPlatCloud().y);
             }
-            if (Hats.get(i).IsHat && platforms.get(i).IsPlat) {
+            if (Hats.get(i).IsHat && platforms.get(i).IsPlat && platforms.get(i).getPosPlat().y>=-47) {
                 sb.draw(Hats.get(i).getHat(), Hats.get(i).getPosHat().x, Hats.get(i).getPosHat().y);
             }
         }
