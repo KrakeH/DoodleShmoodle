@@ -67,7 +67,7 @@ public class Doodle {
     }
 
     public void jump() {
-        velocity.y = 800;
+        velocity.y = 1000;
     }//
 
     public void move(float x) {

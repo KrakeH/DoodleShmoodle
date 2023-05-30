@@ -123,11 +123,11 @@ public class PlayState extends State {
             music.stop();
         }
         //rotation
-        if(gyroY>=0.2){
+        if(gyroY>=0.3){
             RightMove=true;
             LeftMove=false;
         }
-        else if(gyroY<=-0.2){
+        else if(gyroY<=-0.3){
             RightMove=false;
             LeftMove=true;
         }
