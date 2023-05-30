@@ -10,7 +10,7 @@ public class Platform {
     private Texture platform;
     private Vector2 posPlat;
     private Random rand;
-    public boolean IsPlat=true;
+    public boolean IsPlat = true;
 
     public Texture getPlatform() {
         return platform;
@@ -40,12 +40,14 @@ public class Platform {
     public void fall() {
         posPlat.y -= 8;
     }
+
     public void speedFall() {
         posPlat.y -= 16;
     }
-    public void generate(){
+
+    public void generate() {
         if (posPlat.y < 0) {
-            IsPlat=true;
+            IsPlat = true;
             posPlat = new Vector2(rand.nextInt(Main.WIDTH - Main.platwidth), Main.HEIGHT);
         }
     }

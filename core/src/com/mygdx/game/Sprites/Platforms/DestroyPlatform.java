@@ -6,6 +6,7 @@ import com.mygdx.game.Main;
 
 import java.util.Random;
 
+
 public class DestroyPlatform {
     private Texture DestPlatform;
     private Random rand;

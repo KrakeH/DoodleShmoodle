@@ -6,6 +6,7 @@ import com.mygdx.game.Main;
 
 import java.util.Random;
 
+
 public class CloudPlatform {
     private Texture CloudPlat;
     private Vector2 posPlatCloud;

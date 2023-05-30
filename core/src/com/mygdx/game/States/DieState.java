@@ -12,7 +12,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.mygdx.game.Main;
 import com.mygdx.game.Sprites.Doodle;
 
-public class DieState extends State{
+public class DieState extends State {
     Preferences prefs = Gdx.app.getPreferences("game preferences");
     private Texture background;
     private Texture playButton;
@@ -20,16 +20,17 @@ public class DieState extends State{
     private int record;
     private float bestRecord;
     private float nowRecord;
-    private int highscore=prefs.getInteger("highscore");
+    private int highscore = prefs.getInteger("highscore");
     GlyphLayout layout = new GlyphLayout(); //dont do this every frame! Store it as member
 
     BitmapFont font;
-    public DieState(GameStateManager gsm,int record,float x) {
+
+    public DieState(GameStateManager gsm, int record, float x) {
         super(gsm);
-        this.record=record;
+        this.record = record;
         if (record > highscore) {
-            highscore=record;
-            prefs.putInteger("highscore",highscore);
+            highscore = record;
+            prefs.putInteger("highscore", highscore);
             prefs.flush();
         }
         highscore = prefs.getInteger("highscore");
@@ -40,22 +41,22 @@ public class DieState extends State{
 
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("TNR.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size=60;
+        parameter.size = 60;
         parameter.borderColor = Color.BLACK;
         parameter.borderWidth = 3;
         font = generator.generateFont(parameter); // font size 12 pixels
         generator.dispose();
 
-        layout.setText(font,"Best record: "+String.valueOf(highscore));
-        bestRecord=layout.width;
-        layout.setText(font,"Your record: "+String.valueOf(record));
-        nowRecord=layout.width;
+        layout.setText(font, "Best record: " + String.valueOf(highscore));
+        bestRecord = layout.width;
+        layout.setText(font, "Your record: " + String.valueOf(record));
+        nowRecord = layout.width;
     }
 
 
     @Override
     public void handleInpute() {
-        if(Gdx.input.justTouched() && doodle.getPosition().y<=0){
+        if (Gdx.input.justTouched() && doodle.getPosition().y <= 0) {
             gsm.set(new PlayState(gsm));
         }
     }
@@ -63,7 +64,7 @@ public class DieState extends State{
     @Override
     public void update(float dt) {
         handleInpute();
-        doodle.update(dt,0);
+        doodle.update(dt, 0);
     }
 
     @Override
@@ -71,12 +72,12 @@ public class DieState extends State{
         sb.setProjectionMatrix(camera.combined);
         sb.begin();
 
-        sb.draw(background,0 ,0,Main.WIDTH,Main.HEIGHT);
+        sb.draw(background, 0, 0, Main.WIDTH, Main.HEIGHT);
         sb.draw(doodle.getDoodle(), doodle.getPosition().x, doodle.getPosition().y);
-        if(doodle.getPosition().y<0) {
+        if (doodle.getPosition().y < 0) {
             sb.draw(playButton, Main.WIDTH / 2 - playButton.getWidth() / 2, Main.HEIGHT / 2 - playButton.getHeight() / 2);
-            font.draw(sb,"Best record: "+String.valueOf(highscore),Main.WIDTH/2-bestRecord/2,Main.HEIGHT/2+playButton.getHeight()/2+200);
-            font.draw(sb,"Your record: "+String.valueOf(record),Main.WIDTH/2-nowRecord/2,Main.HEIGHT/2+playButton.getHeight()/2+110);
+            font.draw(sb, "Best record: " + String.valueOf(highscore), Main.WIDTH / 2 - bestRecord / 2, Main.HEIGHT / 2 + playButton.getHeight() / 2 + 200);
+            font.draw(sb, "Your record: " + String.valueOf(record), Main.WIDTH / 2 - nowRecord / 2, Main.HEIGHT / 2 + playButton.getHeight() / 2 + 110);
 
         }
         sb.end();

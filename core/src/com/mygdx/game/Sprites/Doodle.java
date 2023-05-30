@@ -65,7 +65,6 @@ public class Doodle {
             position.x = Main.WIDTH;
         }
     }
-
     public void jump() {
         velocity.y = 1000;
     }//

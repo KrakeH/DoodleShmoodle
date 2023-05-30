@@ -12,13 +12,17 @@ public abstract class State {
     public GameStateManager gsm;
 
     public State(GameStateManager gsm) {
-        this.gsm=gsm;
-        camera=new OrthographicCamera();
-        mouse= new Vector3();
+        this.gsm = gsm;
+        camera = new OrthographicCamera();
+        mouse = new Vector3();
     }
+
     public abstract void handleInpute();
+
     public abstract void update(float dt);
+
     public abstract void render(SpriteBatch sb);
+
     public abstract void dispose();
 
 }

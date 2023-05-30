@@ -10,7 +10,7 @@ public class Hat {
     private Texture Hat;
     private Vector2 posHat;
     private Random rand;
-    public boolean IsHat=false;
+    public boolean IsHat = false;
 
     public Texture getHat() {
         return Hat;
@@ -24,23 +24,25 @@ public class Hat {
         rand = new Random();
     }
 
-    public Hat(float y,float x) {
+    public Hat(float y, float x) {
         this();
         Hat = new Texture("Cap.png");
         rand = new Random();
-        posHat = new Vector2(x,y+30);
+        posHat = new Vector2(x, y + 30);
     }
 
     public void fall() {
         posHat.y -= 8;
     }
+
     public void speedFall() {
         posHat.y -= 16;
     }
-    public void generate(float x,float y){
+
+    public void generate(float x, float y) {
         if (posHat.y < 0) {
-            IsHat=rand.nextInt(100) == 0;
-            posHat = new Vector2(rand.nextInt(Main.platwidth-Hat.getWidth())+x,y+48);
+            IsHat = rand.nextInt(100) == 0;
+            posHat = new Vector2(rand.nextInt(Main.platwidth - Hat.getWidth()) + x, y + 48);
         }
     }
 }
